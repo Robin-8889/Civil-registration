@@ -1,0 +1,50 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "csrf",
+    "endsection",
+    "enderror",
+    "autofocus",
+    "Laravel",
+    "Blade",
+    "svg",
+    "viewBox",
+    "xmlns",
+    "fillrule",
+    "currentColor",
+    "endforeach",
+    "endif",
+    "endwhile",
+    "endfor",
+    "forelse",
+    "endforelse",
+    "twilio",
+    "artisan",
+    "phpunit",
+    "civill",
+    "registration",
+    "Registrar",
+    "pluralize",
+    "addslashes",
+    "evenodd",
+    "ucfirst",
+    "tabindex",
+    "stylesheet",
+    "rgba",
+    "Segoe",
+    "Playfair",
+    "rgb",
+    "linecap",
+    "linejoin"
+  ],
+  "ignoreWords": [
+    "csrf_token",
+    "endslashes"
+  ],
+  "flagWords": [],
+  "ignoreRegExpList": [
+    "@[a-z]+"
+  ],
+  "import": []
+}
