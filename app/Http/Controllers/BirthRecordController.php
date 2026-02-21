@@ -12,11 +12,17 @@ class BirthRecordController extends Controller
     {
         $this->authorize('viewAny', BirthRecord::class);
 
+        /** @var \App\Models\User $user */
         $user = auth()->user();
         if ($user->isSystemAdmin()) {
             $records = BirthRecord::with(['office'])->paginate(15);
+        } elseif ($user->isRegistrar() && $user->office) {
+            // Registrars can see records from all offices in their region
+            $records = BirthRecord::whereHas('office', function($query) use ($user) {
+                $query->where('region', $user->office->region);
+            })->with(['office'])->paginate(15);
         } else {
-            // Non-admin users only see records from their office
+            // Other users only see records from their specific office
             $records = BirthRecord::where('registration_office_id', $user->registration_office_id)
                 ->with(['office'])->paginate(15);
         }
@@ -28,7 +34,10 @@ class BirthRecordController extends Controller
     {
         $this->authorize('create', BirthRecord::class);
         $offices = RegistrationOffice::all();
-        return view('birth_records.create', compact('offices'));
+        /** @var \App\Models\User $authUser */
+        $authUser = auth()->user();
+        $userOfficeId = $authUser->registration_office_id;
+        return view('birth_records.create', compact('offices', 'userOfficeId'));
     }
 
     public function store(Request $request)

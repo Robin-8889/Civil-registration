@@ -79,7 +79,7 @@
     <!-- Pending Registrations & Quick Actions Row -->
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-box">
                 <div class="card-header bg-white border-bottom">
                     <h5 class="mb-0 text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
@@ -109,7 +109,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-box">
                 <div class="card-header bg-white border-bottom">
                     <h5 class="mb-0 text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
@@ -148,7 +148,7 @@
         @if($pendingUsers->count() > 0)
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <div class="card border-warning">
+                    <div class="card border-warning dashboard-box">
                         <div class="card-header bg-warning text-dark">
                             <h5 class="mb-0">⚠️ Pending User Approvals - Grant Office Admin Permission ({{ $pendingUsers->count() }} pending)</h5>
                         </div>
@@ -223,7 +223,7 @@
         @if($grantedUsers->count() > 0)
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <div class="card border-success">
+                    <div class="card border-success dashboard-box">
                         <div class="card-header bg-success text-white">
                             <h5 class="mb-0">✓ Granted Office Admin Users ({{ $grantedUsers->count() }} active)</h5>
                         </div>
@@ -279,7 +279,7 @@
         @if($pendingUsers->count() === 0 && $grantedUsers->count() === 0)
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="card dashboard-box">
                         <div class="card-body text-center text-muted">
                             <p>No pending users to approve or granted users to manage.</p>
                         </div>

@@ -134,7 +134,7 @@
                 <div class="mb-3">
                     <label for="issue_date" class="form-label">Issue Date</label>
                     <input type="date" class="form-control @error('issue_date') is-invalid @enderror"
-                        id="issue_date" name="issue_date" value="{{ old('issue_date', $certificate->issue_date) }}" required>
+                        id="issue_date" name="issue_date" value="{{ old('issue_date', $certificate->issue_date ? \Carbon\Carbon::parse($certificate->issue_date)->format('Y-m-d') : '') }}" required>
                     @error('issue_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

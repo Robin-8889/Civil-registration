@@ -26,7 +26,6 @@
                                     <label class="form-check-label" for="deceased_{{ $record->id }}">
                                         <strong style="color: #dc3545;">{{ $record->birth_certificate_no }}</strong>
                                         <span style="color: #333;">- {{ $record->child_first_name }} {{ $record->child_last_name }}</span>
-                                        <span style="color: #6c757d; font-size: 0.9em;">({{ $record->child->national_id ?? 'N/A' }})</span>
                                     </label>
                                 </div>
                             @endforeach
@@ -40,7 +39,7 @@
                 <div class="mb-3">
                     <label for="date_of_death" class="form-label">Date of Death</label>
                     <input type="date" class="form-control @error('date_of_death') is-invalid @enderror"
-                        id="date_of_death" name="date_of_death" value="{{ old('date_of_death', $deathRecord->date_of_death) }}" required>
+                        id="date_of_death" name="date_of_death" value="{{ old('date_of_death', $deathRecord->date_of_death ? \Carbon\Carbon::parse($deathRecord->date_of_death)->format('Y-m-d') : '') }}" required>
                     @error('date_of_death')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

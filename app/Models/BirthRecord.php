@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class BirthRecord extends Model
 {
     protected $fillable = [
-        'child_id',
         'registration_office_id',
         'birth_certificate_no',
         'date_of_birth',
@@ -57,11 +56,6 @@ class BirthRecord extends Model
         return "{$prefix}-{$year}-{$sequentialNumber}";
     }
 
-    public function child()
-    {
-        return $this->belongsTo(Citizen::class, 'child_id');
-    }
-
     public function office()
     {
         return $this->belongsTo(RegistrationOffice::class, 'registration_office_id');
@@ -71,5 +65,20 @@ class BirthRecord extends Model
     {
         return $this->hasOne(Certificate::class, 'record_id')
             ->where('record_type', 'birth');
+    }
+
+    public function deathRecord()
+    {
+        return $this->hasOne(DeathRecord::class, 'deceased_birth_id');
+    }
+
+    public function marriageAsGroom()
+    {
+        return $this->hasMany(MarriageRecord::class, 'groom_id', 'id');
+    }
+
+    public function marriageAsBride()
+    {
+        return $this->hasMany(MarriageRecord::class, 'bride_id', 'id');
     }
 }

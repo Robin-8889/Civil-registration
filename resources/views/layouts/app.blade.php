@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #BFC9D1;
         }
         nav {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -21,7 +21,7 @@
             min-height: calc(100vh - 120px);
         }
         footer {
-            background-color: #f8f9fa;
+            background-color: #BFC9D1;
             border-top: 1px solid #dee2e6;
             padding: 2rem 0;
             margin-top: 3rem;
@@ -55,17 +55,173 @@
             font-weight: 600;
         }
 
+        /* Login Card Header Custom Color */
+        .login-card-header {
+            background-color: #DCE4C9 !important;
+            color: #2d3436 !important;
+        }
+
+        /* Login Card Background Custom Color */
+        .login-card {
+            background-color: #DCE4C9 !important;
+            border: none;
+        }
+
+        .login-card .card-body {
+            background-color: #DCE4C9;
+        }
+
+        /* Keep form elements with default styling */
+        .login-card .form-control,
+        .login-card .form-control:focus {
+            background-color: #ffffff;
+            color: #2d3436;
+        }
+
+        .login-card .btn-primary {
+            background-color: #0b7285;
+            border-color: #0b7285;
+        }
+
+        .login-card .btn-primary:hover {
+            background-color: #094d60;
+            border-color: #094d60;
+        }
+
+        .login-card .form-check-input {
+            background-color: #ffffff;
+            border-color: #dee2e6;
+        }
+
+        .login-card hr {
+            border-color: rgba(45, 52, 54, 0.15);
+        }
+
+        .login-card .text-center {
+            color: #2d3436;
+        }
+
+        .login-card a {
+            color: #0b7285;
+            text-decoration: none;
+        }
+
+        .login-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Office card styling */
+        .office-card {
+            background-color: #EAEFEF;
+        }
+
+        /* Dashboard box styling */
+        .dashboard-box {
+            background-color: #E1D9BC;
+        }
+
         /* Responsive font sizing */
         @media (max-width: 768px) {
             .display-4 {
                 font-size: 2rem;
             }
         }
+
+        /* Pill-style navbar links */
+        .nav-pill-link {
+            border-radius: 999px;
+            padding: 0.35rem 0.85rem;
+            margin: 0 0.2rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Light navbar pill links */
+        .navbar-light-bg .nav-pill-link {
+            color: #1A4D2E !important;
+            background-color: rgba(26, 77, 46, 0.12);
+        }
+        .navbar-light-bg .nav-pill-link:hover,
+        .navbar-light-bg .nav-pill-link:focus {
+            color: #1A4D2E;
+            background-color: rgba(26, 77, 46, 0.22);
+        }
+        .navbar-light-bg .nav-pill-link.active {
+            color: #1A4D2E;
+            background-color: rgba(26, 77, 46, 0.3);
+        }
+
+        /* Dark navbar pill links (fallback) */
+        .navbar-dark .nav-pill-link {
+            color: #1f2a37;
+            background-color: #FFF5E0;
+        }
+        .navbar-dark .nav-pill-link:hover,
+        .navbar-dark .nav-pill-link:focus {
+            color: #1f2a37;
+            background-color: #ffe8bd;
+        }
+        .navbar-dark .nav-pill-link.active {
+            color: #1f2a37;
+            background-color: #ffe1a3;
+        }
+
+        /* Navbar custom background */
+        .navbar-light-bg {
+            background-color: #F6F0D7 !important;
+        }
+
+        .navbar-light-bg .navbar-brand {
+            color: #1A4D2E !important;
+            font-weight: bold;
+        }
+
+        .navbar-light-bg .navbar-toggler {
+            border-color: rgba(26, 77, 46, 0.3);
+        }
+
+        .navbar-light-bg .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%231A4D2E' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Dropdown styling for light navbar */
+        .navbar-light-bg .dropdown-menu {
+            border-color: #1A4D2E;
+        }
+
+        .navbar-light-bg .dropdown-item {
+            color: #1A4D2E;
+        }
+
+        .navbar-light-bg .dropdown-item:hover,
+        .navbar-light-bg .dropdown-item:focus {
+            background-color: rgba(26, 77, 46, 0.1);
+            color: #1A4D2E;
+        }
+
+        /* Login/Register pill buttons */
+        .nav-pill-button {
+            border-radius: 999px;
+            padding: 0.4rem 0.95rem;
+            margin: 0 0.2rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            background-color: #1A4D2E;
+            color: #F6F0D7 !important;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .nav-pill-button:hover,
+        .nav-pill-button:focus {
+            background-color: #0f3620;
+            color: #F6F0D7 !important;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-light-bg">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
                 📋 Civil Registration System
@@ -77,10 +233,13 @@
                 <ul class="navbar-nav ms-auto">
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="nav-link nav-pill-link" href="{{ route('dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-pill-link" href="{{ route('citizens.index') }}">Citizens</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="recordsDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link nav-pill-link dropdown-toggle" href="#" id="recordsDropdown" role="button" data-bs-toggle="dropdown">
                                 Records
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -92,15 +251,14 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('registration_offices.index') }}">Offices</a>
+                            <a class="nav-link nav-pill-link" href="{{ route('registration_offices.index') }}">Offices</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link nav-pill-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.change-password') }}">Change Password</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" style="display:inline;">
@@ -112,10 +270,10 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link nav-pill-button" href="{{ route('login') }}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">Register</a>
+                            <a class="nav-link nav-pill-button" href="{{ route('register') }}">Register</a>
                         </li>
                     @endauth
                 </ul>

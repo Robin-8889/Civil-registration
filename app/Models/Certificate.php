@@ -24,4 +24,17 @@ class Certificate extends Model
             'expiry_date' => 'date',
         ];
     }
+
+    // Polymorphic relationship to get the related record
+    public function record()
+    {
+        if ($this->record_type === 'birth') {
+            return $this->belongsTo(BirthRecord::class, 'record_id');
+        } elseif ($this->record_type === 'marriage') {
+            return $this->belongsTo(MarriageRecord::class, 'record_id');
+        } elseif ($this->record_type === 'death') {
+            return $this->belongsTo(DeathRecord::class, 'record_id');
+        }
+        return null;
+    }
 }

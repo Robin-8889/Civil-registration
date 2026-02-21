@@ -101,16 +101,6 @@
                         </div>
                     </div>
 
-                    @if($birthRecord->child)
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <h6 class="text-muted">Linked Citizen</h6>
-                            <p>{{ $birthRecord->child->first_name }} {{ $birthRecord->child->last_name }}
-                                ({{ $birthRecord->child->national_id }})</p>
-                        </div>
-                    </div>
-                    @endif
-
                     <hr>
 
                     <div class="row">

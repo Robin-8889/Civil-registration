@@ -4,8 +4,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-7">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow login-card">
+                <div class="card-header login-card-header">
                     <h4 class="mb-0">Create New Account</h4>
                 </div>
                 <div class="card-body">

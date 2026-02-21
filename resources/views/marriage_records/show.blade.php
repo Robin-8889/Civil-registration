@@ -48,7 +48,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">National ID</h6>
-                            <p>{{ $marriageRecord->groom->child->national_id ?? 'N/A' }}</p>
+                            <p>N/A</p>
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="text-muted">National ID</h6>
-                            <p>{{ $marriageRecord->bride->child->national_id ?? 'N/A' }}</p>
+                            <p>N/A</p>
                         </div>
                     </div>
 

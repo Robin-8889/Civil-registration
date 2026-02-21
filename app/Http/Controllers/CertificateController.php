@@ -15,7 +15,8 @@ class CertificateController extends Controller
         $this->middleware(function ($request, $next) {
             $user = $request->user();
 
-            if ($user && ($user->isSystemAdmin() || $user->isAdmin())) {
+            // Allow system admin, office admin, and registrars
+            if ($user && ($user->isSystemAdmin() || $user->isAdmin() || $user->isRegistrar())) {
                 return $next($request);
             }
 
@@ -25,15 +26,79 @@ class CertificateController extends Controller
 
     public function index()
     {
-        $records = Certificate::paginate(15);
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        if ($user->isSystemAdmin()) {
+            $records = Certificate::paginate(15);
+        } elseif ($user->isRegistrar() && $user->office) {
+            // Registrars see certificates for records from their region
+            $records = Certificate::where(function($query) use ($user) {
+                $query->whereIn('record_id', function($subQuery) use ($user) {
+                    $subQuery->select('id')
+                        ->from('birth_records')
+                        ->whereIn('registration_office_id', function($officeQuery) use ($user) {
+                            $officeQuery->select('id')
+                                ->from('registration_offices')
+                                ->where('region', $user->office->region);
+                        });
+                })->where('record_type', 'birth')
+                ->orWhereIn('record_id', function($subQuery) use ($user) {
+                    $subQuery->select('id')
+                        ->from('marriage_records')
+                        ->whereIn('registration_office_id', function($officeQuery) use ($user) {
+                            $officeQuery->select('id')
+                                ->from('registration_offices')
+                                ->where('region', $user->office->region);
+                        });
+                })->where('record_type', 'marriage')
+                ->orWhereIn('record_id', function($subQuery) use ($user) {
+                    $subQuery->select('id')
+                        ->from('death_records')
+                        ->whereIn('registration_office_id', function($officeQuery) use ($user) {
+                            $officeQuery->select('id')
+                                ->from('registration_offices')
+                                ->where('region', $user->office->region);
+                        });
+                })->where('record_type', 'death');
+            })->paginate(15);
+        } else {
+            $records = Certificate::paginate(15);
+        }
+
         return view('certificates.index', compact('records'));
     }
 
     public function create()
     {
-        $birthRecords = BirthRecord::where('status', 'registered')->get();
-        $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
-        $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        if ($user->isSystemAdmin()) {
+            $birthRecords = BirthRecord::where('status', 'registered')->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
+            $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        } elseif ($user->isRegistrar() && $user->office) {
+            // Registrars see registered records from their region
+            $birthRecords = BirthRecord::where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])
+                ->where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+            $deathRecords = DeathRecord::with('deceased')
+                ->where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+        } else {
+            $birthRecords = BirthRecord::where('status', 'registered')->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
+            $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        }
 
         return view('certificates.create', compact('birthRecords', 'marriageRecords', 'deathRecords'));
     }
@@ -57,14 +122,41 @@ class CertificateController extends Controller
 
     public function show(Certificate $certificate)
     {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
         return view('certificates.show', compact('certificate'));
     }
 
     public function edit(Certificate $certificate)
     {
-        $birthRecords = BirthRecord::where('status', 'registered')->get();
-        $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
-        $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        if ($user->isSystemAdmin()) {
+            $birthRecords = BirthRecord::where('status', 'registered')->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
+            $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        } elseif ($user->isRegistrar() && $user->office) {
+            // Registrars see registered records from their region
+            $birthRecords = BirthRecord::where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])
+                ->where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+            $deathRecords = DeathRecord::with('deceased')
+                ->where('status', 'registered')
+                ->whereHas('office', function($query) use ($user) {
+                    $query->where('region', $user->office->region);
+                })->get();
+        } else {
+            $birthRecords = BirthRecord::where('status', 'registered')->get();
+            $marriageRecords = MarriageRecord::with(['groom', 'bride'])->where('status', 'registered')->get();
+            $deathRecords = DeathRecord::with('deceased')->where('status', 'registered')->get();
+        }
 
         return view('certificates.edit', compact('certificate', 'birthRecords', 'marriageRecords', 'deathRecords'));
     }
@@ -90,5 +182,21 @@ class CertificateController extends Controller
     {
         $certificate->delete();
         return redirect()->route('certificates.index')->with('success', 'Certificate deleted.');
+    }
+
+    public function download(Certificate $certificate)
+    {
+        // Get the related record details
+        $recordData = null;
+
+        if ($certificate->record_type === 'birth') {
+            $recordData = BirthRecord::find($certificate->record_id);
+        } elseif ($certificate->record_type === 'marriage') {
+            $recordData = MarriageRecord::with(['groom', 'bride'])->find($certificate->record_id);
+        } elseif ($certificate->record_type === 'death') {
+            $recordData = DeathRecord::with('deceased')->find($certificate->record_id);
+        }
+
+        return view('certificates.download', compact('certificate', 'recordData'));
     }
 }

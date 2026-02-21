@@ -66,7 +66,7 @@
 
         <div class="mb-3">
             <label for="date_of_birth" class="form-label">Date of Birth</label>
-            <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" value="{{ old('date_of_birth', $birthRecord->date_of_birth) }}" required>
+            <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" value="{{ old('date_of_birth', $birthRecord->date_of_birth ? \Carbon\Carbon::parse($birthRecord->date_of_birth)->format('Y-m-d') : '') }}" required>
             @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 

@@ -86,7 +86,9 @@
             <select name="registration_office_id" class="form-control @error('registration_office_id') is-invalid @enderror" required>
                 <option value="">Select an office</option>
                 @foreach($offices as $office)
-                    <option value="{{ $office->id }}">{{ $office->office_name }} - {{ $office->region }}</option>
+                    <option value="{{ $office->id }}" {{ old('registration_office_id', $userOfficeId) == $office->id ? 'selected' : '' }}>
+                        {{ $office->office_name }} - {{ $office->region }}
+                    </option>
                 @endforeach
             </select>
             @error('registration_office_id') <div class="invalid-feedback">{{ $message }}</div> @enderror

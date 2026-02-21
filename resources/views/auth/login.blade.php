@@ -1,9 +1,11 @@
 @extends('layouts.app')
+
+@section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow login-card">
+                <div class="card-header login-card-header">
                     <h4 class="mb-0">Login</h4>
                 </div>
                 <div class="card-body">
@@ -44,16 +46,6 @@
                 </div>
             </div>
 
-            <!-- Default test credentials info -->
-            <div class="alert alert-info mt-4">
-                <strong>Test Credentials:</strong>
-                <ul class="mb-0">
-                    <li>Email: <code>admin@civilreg.tz</code> | Password: <code>password123</code></li>
-                    <li>Email: <code>registrar@dar.tz</code> | Password: <code>password123</code></li>
-                    <li>Email: <code>clerk@arusha.tz</code> | Password: <code>password123</code></li>
-                    <li>Email: <code>citizen@example.tz</code> | Password: <code>password123</code></li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>

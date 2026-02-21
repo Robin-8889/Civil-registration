@@ -3,39 +3,56 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Citizen extends Model
 {
+    protected $table = 'citizens';
+
     protected $fillable = [
-        'national_id',
+        'birth_record_id',
         'first_name',
         'middle_name',
         'last_name',
-        'date_of_birth',
         'gender',
+        'date_of_birth',
+        'birth_certificate_no',
         'place_of_birth',
-        'address',
-        'phone',
-        'email',
+        'birth_registration_date',
+        'father_name',
+        'mother_name',
+        'nationality',
+        'registration_office_id',
+        'region',
+        'record_status',
+        'is_married',
+        'marriage_record_id',
+        'marriage_certificate_no',
+        'marriage_date',
+        'is_dead',
+        'death_record_id',
+        'death_certificate_no',
+        'death_date',
     ];
 
-    public function birthRecords()
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
+    /**
+     * Calculate age of the citizen
+     */
+    public function getAgeAttribute()
     {
-        return $this->hasMany(BirthRecord::class, 'child_id');
+        return Carbon::parse($this->date_of_birth)->age;
     }
 
-    public function asGroom()
+    /**
+     * Get full name
+     */
+    public function getFullNameAttribute()
     {
-        return $this->hasMany(MarriageRecord::class, 'groom_id');
-    }
-
-    public function asBride()
-    {
-        return $this->hasMany(MarriageRecord::class, 'bride_id');
-    }
-
-    public function deathRecords()
-    {
-        return $this->hasMany(DeathRecord::class, 'deceased_id');
+        return trim("{$this->first_name} {$this->middle_name} {$this->last_name}");
     }
 }
+

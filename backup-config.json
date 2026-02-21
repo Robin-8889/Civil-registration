@@ -1,0 +1,79 @@
+{
+  "backup": {
+    "enabled": true,
+    "backupRoot": "C:\\xampp\\backups",
+    "backupDirectories": {
+      "full": "C:\\xampp\\backups\\oracle\\full",
+      "incremental": "C:\\xampp\\backups\\oracle\\incremental",
+      "logs": "C:\\xampp\\backups\\oracle\\logs",
+      "archive": "C:\\xampp\\backups\\archive"
+    },
+    "retention": {
+      "fullBackup": 28,
+      "incrementalBackup": 7,
+      "transactionLogs": 14,
+      "archiveMonths": 365
+    }
+  },
+  "database": {
+    "type": "oracle",
+    "hostname": "localhost",
+    "port": 1521,
+    "serviceName": "XE",
+    "username": "system",
+    "passwordFile": "C:\\xampp\\backups\\.oracle_creds"
+  },
+  "application": {
+    "path": "C:\\xampp\\htdocs\\civil-registration",
+    "gitEnabled": true,
+    "gitBranch": "main",
+    "gitRemote": "origin",
+    "githubRepository": "https://github.com/Robin-8889/Civil-registration",
+    "githubEnabled": true
+  },
+  "github": {
+    "enabled": true,
+    "repository": "https://github.com/Robin-8889/Civil-registration",
+    "personalAccessToken": "ghp_placeholder",
+    "tokenLocation": "C:\\xampp\\backups\\.github_token",
+    "pushBranchBackups": true,
+    "createReleases": true
+  },
+  "notification": {
+    "emailEnabled": true,
+    "emailFrom": "rcmchacha88@gmail.com",
+    "emailTo": ["rcmchacha88@gmail.com"],
+    "smtpServer": "smtp.gmail.com",
+    "smtpPort": 587,
+    "useSSL": true,
+    "gmailAppPassword": true,
+    "passwordLocation": "C:\\xampp\\backups\\.gmail_creds",
+    "alertOnSuccess": false,
+    "alertOnWarning": true,
+    "alertOnError": true
+  },
+  "scheduling": {
+    "fullBackup": {
+      "enabled": true,
+      "day": "Sunday",
+      "time": "02:00",
+      "description": "Weekly full database backup"
+    },
+    "incrementalBackup": {
+      "enabled": true,
+      "time": "23:00",
+      "description": "Daily incremental backup"
+    },
+    "verification": {
+      "enabled": true,
+      "dayOfWeek": "Monday",
+      "time": "08:00",
+      "description": "Monthly backup verification test"
+    }
+  },
+  "logging": {
+    "logDirectory": "C:\\xampp\\backups\\logs",
+    "retention": 90,
+    "verboseLogging": true
+  }
+}

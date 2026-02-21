@@ -166,7 +166,18 @@ class User extends Authenticatable
             return true;
         }
 
-        // Office admin/registrar can access their assigned office
+        // Registrars can access records from any office in their region
+        if ($this->isApproved() && $this->isRegistrar() && $this->office) {
+            // Get the office of the record
+            $recordOffice = RegistrationOffice::find($officeId);
+
+            // Allow access if both offices are in the same region
+            if ($recordOffice && $this->office->region === $recordOffice->region) {
+                return true;
+            }
+        }
+
+        // Office admin can access their assigned office only
         if ($this->registration_office_id == $officeId && $this->isApproved()) {
             return true;
         }

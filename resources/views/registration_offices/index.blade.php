@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div class="card mb-4">
+    <div class="card mb-4 office-card">
         <div class="card-body">
             <form method="GET" action="{{ route('registration_offices.index') }}" class="row g-3">
                 <div class="col-md-5">
@@ -49,7 +49,7 @@
         <div class="row">
             @foreach($records as $office)
                 <div class="col-md-6 mb-4">
-                    <div class="card">
+                    <div class="card office-card">
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0">{{ $office->office_name }}</h5>
                         </div>

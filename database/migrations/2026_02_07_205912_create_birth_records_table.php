@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('birth_records', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('child_id');
             $table->unsignedBigInteger('registration_office_id');
             $table->string('birth_certificate_no')->unique();
             $table->date('date_of_birth');
@@ -27,7 +26,6 @@ return new class extends Migration
             $table->date('registration_date');
             $table->enum('status', ['registered', 'pending', 'rejected'])->default('pending');
             $table->timestamps();
-            $table->foreign('child_id')->references('id')->on('citizens')->onDelete('cascade');
             $table->foreign('registration_office_id')->references('id')->on('registration_offices')->onDelete('cascade');
         });
     }

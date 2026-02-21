@@ -25,7 +25,6 @@
                                     <label class="form-check-label" for="deceased_{{ $record->id }}">
                                         <strong style="color: #dc3545;">{{ $record->birth_certificate_no }}</strong>
                                         <span style="color: #333;">- {{ $record->child_first_name }} {{ $record->child_last_name }}</span>
-                                        <span style="color: #6c757d; font-size: 0.9em;">({{ $record->child->national_id ?? 'N/A' }})</span>
                                     </label>
                                 </div>
                             @endforeach
@@ -106,7 +105,7 @@
                         id="registration_office_id" name="registration_office_id" required>
                         <option value="">-- Select Office --</option>
                         @foreach($offices as $office)
-                            <option value="{{ $office->id }}" {{ old('registration_office_id') == $office->id ? 'selected' : '' }}>
+                            <option value="{{ $office->id }}" {{ old('registration_office_id', $userOfficeId) == $office->id ? 'selected' : '' }}>
                                 {{ $office->office_name }} ({{ $office->region }})
                             </option>
                         @endforeach
