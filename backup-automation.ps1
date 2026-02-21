@@ -418,11 +418,18 @@ try {
         $githubScriptPath = Join-Path $PSScriptRoot "github-integration.ps1"
         if (Test-Path $githubScriptPath) {
             try {
-                $backupType = if ($BackupType -eq "both") { "Full and Incremental" } else { $BackupType }
+                # Format backup type for display
+                $backupTypeDisplay = switch ($BackupType) {
+                    "full" { "Full database backup" }
+                    "incremental" { "Incremental backup" }
+                    "both" { "Full and Incremental backups" }
+                    default { "Database backup" }
+                }
+
                 Write-Status "Sending success notification..."
                 & $githubScriptPath -SendEmailAlert -MessageType "Success" `
                     -MessageSubject "Backup Completed Successfully" `
-                    -MessageBody "Successfully completed $backupType backup of Civil Registration database at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+                    -MessageBody "Successfully completed $backupTypeDisplay of Civil Registration database at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
                 Write-Success "Email notification sent"
             }
             catch {
