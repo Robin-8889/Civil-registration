@@ -48,7 +48,7 @@
     "useSSL": true,
     "gmailAppPassword": true,
     "passwordLocation": "C:\\xampp\\backups\\.gmail_creds",
-    "alertOnSuccess": false,
+    "alertOnSuccess": true,
     "alertOnWarning": true,
     "alertOnError": true
   },

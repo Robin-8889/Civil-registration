@@ -91,7 +91,7 @@ function Get-GmailCredentials {
 
         return @{
             Email = $parts[0].Trim()
-            AppPassword = $parts[1].Trim()
+            AppPassword = $parts[1].Trim() -replace '\s+', ''  # Remove all spaces from app password
         }
     }
     catch {

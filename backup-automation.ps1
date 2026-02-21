@@ -160,11 +160,11 @@ function Backup-OracleDatabase {
     )
 
     if ($Type -eq "full") {
-        $expdpCmd += @("full=y", "parallel=4", "compression=all")
+        # Full database export (Oracle XE compatible)
+        $expdpCmd += @("full=y")
     } else {
-        # Incremental: export only changes from last 24 hours
-        $yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd HH:mm:ss")
-        $expdpCmd += @("flashback_time=`"TO_TIMESTAMP('$yesterday', 'YYYY-MM-DD HH24:MI:SS')`"", "parallel=4")
+        # Incremental: export full (XE doesn't support advanced incremental features)
+        $expdpCmd += @("full=y")
     }
 
     Write-Status "Starting Data Pump export..."
