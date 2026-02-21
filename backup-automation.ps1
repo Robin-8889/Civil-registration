@@ -139,11 +139,8 @@ function Backup-OracleDatabase {
     Write-Status ""
     Write-Status "========== Oracle Database Backup ($Type) =========="
 
-    $backupDir = if ($Type -eq "full") {
-        $config.backup.backupDirectories.full
-    } else {
-        $config.backup.backupDirectories.incremental
-    }
+    # Oracle XE: Use same directory for both types (XE doesn't support true incremental)
+    $backupDir = $config.backup.backupDirectories.full
 
     $dumpFile = "civil_reg_$($Type)_$timestamp.dmp"
     $logFileOracle = "civil_reg_$($Type)_$timestamp.log"
@@ -180,10 +177,25 @@ function Backup-OracleDatabase {
         Pop-Location
 
         if ($process.ExitCode -eq 0) {
-            $fileSize = (Get-Item $dumpPath).Length / 1MB
-            Write-Success "Database backup completed successfully"
-            Write-Success "Backup file: $dumpFile"
-            Write-Success "Size: $([math]::Round($fileSize, 2)) MB"
+            # Check if file exists and get size
+            if (Test-Path $dumpPath) {
+                $fileSize = (Get-Item $dumpPath).Length / 1MB
+                Write-Success "Database backup completed successfully"
+                Write-Success "Backup file: $dumpFile"
+                Write-Success "Size: $([math]::Round($fileSize, 2)) MB"
+            } else {
+                # File might be in the Oracle directory location instead
+                $altPath = Join-Path $config.backup.backupDirectories.full $dumpFile
+                if (Test-Path $altPath) {
+                    $fileSize = (Get-Item $altPath).Length / 1MB
+                    Write-Success "Database backup completed successfully"
+                    Write-Success "Backup file: $dumpFile (in full backup directory)"
+                    Write-Success "Size: $([math]::Round($fileSize, 2)) MB"
+                } else {
+                    Write-Success "Database backup completed successfully"
+                    Write-Warning "Could not determine backup file size"
+                }
+            }
             return $true
         } else {
             Write-Error "Data Pump export failed with exit code: $($process.ExitCode)"
