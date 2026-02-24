@@ -37,6 +37,9 @@ Route::prefix('api/statistics')->name('api.statistics.')->group(function () {
 // Public XML Reports Routes
 Route::prefix('reports/xml')->name('reports.xml.')->group(function () {
     Route::get('/vital-statistics', [XMLReportController::class, 'vitalStatisticsExport'])->name('vital_statistics');
+    Route::get('/citizen/{birthRecord}', [XMLReportController::class, 'citizenReport'])->name('citizen');
+    Route::get('/regional/{region}/{year?}', [XMLReportController::class, 'regionalStatistics'])->name('regional');
+    Route::get('/monthly/{year}/{month}', [XMLReportController::class, 'monthlyReport'])->name('monthly');
 });
 
 // Authenticated routes
@@ -82,12 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('certificates', CertificateController::class);
         Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])->name('certificates.download');
 
-        // XML Reports - System admin and office admin only
-        Route::prefix('reports/xml')->name('reports.xml.')->group(function () {
-            Route::get('/citizen/{birthRecord}', [XMLReportController::class, 'citizenReport'])->name('citizen');
-            Route::get('/regional/{region}/{year?}', [XMLReportController::class, 'regionalStatistics'])->name('regional');
-            Route::get('/monthly/{year}/{month}', [XMLReportController::class, 'monthlyReport'])->name('monthly');
-        });
+        // (XML Reports routes moved to public section above)
     });
 });
 
