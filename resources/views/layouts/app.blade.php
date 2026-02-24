@@ -283,6 +283,17 @@
 
     <!-- Main Content -->
     <div class="main-content">
+
+
+        @if(session('error'))
+            <div class="container mt-4">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        @endif
+
         @if($errors->any())
             <div class="container mt-4">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

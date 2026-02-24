@@ -59,7 +59,14 @@ class BirthRecordController extends Controller
         $validated['registration_date'] = now()->toDateString();
         $validated['status'] = 'pending';
 
-        BirthRecord::create($validated);
+        try {
+            BirthRecord::create($validated);
+        } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'ORA-20001') !== false) {
+                return redirect()->back()->withInput()->with('error', 'Birth date cannot be in the future. Please enter a valid date.');
+            }
+            return redirect()->back()->withInput()->with('error', 'An unexpected error occurred. Please try again or contact support.');
+        }
 
         return redirect()->route('birth_records.index')->with('success', 'Birth record registered successfully.');
     }
