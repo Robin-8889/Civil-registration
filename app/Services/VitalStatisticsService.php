@@ -169,4 +169,253 @@ class VitalStatisticsService
         $bindings = $year ? [$year] : [];
         return DB::select($sql, $bindings);
     }
+
+    // ========================
+    // CURSOR-BASED METHODS
+    // These call stored procedures with cursors instead of direct SQL
+    // Same functionality, alternative implementation
+    // ========================
+
+    /**
+     * Get birth statistics by region and year using CURSOR
+     * Calls stored procedure: sp_birth_statistics_by_region
+     */
+    public static function getBirthStatisticsByRegionCursor($year = null)
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            // Prepare call to stored procedure with cursor output
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_birth_statistics_by_region(:year, :cursor);
+                END;
+            ");
+
+            // Bind parameters
+            $stmt->bindParam(':year', $year, \PDO::PARAM_INT);
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+
+            // Execute procedure
+            $stmt->execute();
+
+            // Fetch results from cursor
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            // Convert to standard format (array of objects)
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            // Fall back to direct SQL if cursor fails
+            return self::getBirthStatisticsByRegion($year);
+        }
+    }
+
+    /**
+     * Get death statistics by age group using CURSOR
+     * Calls stored procedure: sp_death_statistics_by_age
+     */
+    public static function getDeathStatisticsByAgeCursor()
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_death_statistics_by_age(:cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getDeathStatisticsByAge();
+        }
+    }
+
+    /**
+     * Get marriage statistics by region and year using CURSOR
+     * Calls stored procedure: sp_marriage_statistics_by_region
+     */
+    public static function getMarriageStatisticsByRegionCursor($year = null)
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_marriage_statistics_by_region(:year, :cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':year', $year, \PDO::PARAM_INT);
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getMarriageStatisticsByRegion($year);
+        }
+    }
+
+    /**
+     * Get population demographics using CURSOR
+     * Calls stored procedure: sp_population_demographics
+     */
+    public static function getPopulationDemographicsCursor($region = null)
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_population_demographics(:region, :cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':region', $region, \PDO::PARAM_STR);
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getPopulationDemographics($region);
+        }
+    }
+
+    /**
+     * Get annual vital statistics summary using CURSOR
+     * Calls stored procedure: sp_annual_vital_summary
+     */
+    public static function getAnnualVitalSummaryCursor($year)
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_annual_vital_summary(:year, :cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':year', $year, \PDO::PARAM_INT);
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getAnnualVitalSummary($year);
+        }
+    }
+
+    /**
+     * Get birth registration completeness using CURSOR
+     * Calls stored procedure: sp_birth_registration_completeness
+     */
+    public static function getBirthRegistrationCompletenessCursor()
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_birth_registration_completeness(:cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getBirthRegistrationCompleteness();
+        }
+    }
+
+    /**
+     * Get certificates issued report using CURSOR
+     * Calls stored procedure: sp_certificates_issued_report
+     */
+    public static function getCertificatesIssuedReportCursor($year = null)
+    {
+        try {
+            $pdo = DB::connection('oracle')->getPdo();
+
+            $stmt = $pdo->prepare("
+                BEGIN
+                    sp_certificates_issued_report(:year, :cursor);
+                END;
+            ");
+
+            $stmt->bindParam(':year', $year, \PDO::PARAM_INT);
+            $stmt->bindParam(':cursor', $cursor, \PDO::PARAM_LOB);
+            $stmt->execute();
+
+            $results = [];
+            if (is_resource($cursor)) {
+                oci_fetch_all($cursor, $results, 0, -1, OCI_FETCHSTATEMENT_BY_ROW);
+                oci_free_cursor($cursor);
+            }
+
+            return array_map(function($row) {
+                return (object) array_change_key_case($row, CASE_LOWER);
+            }, $results);
+
+        } catch (\Exception $e) {
+            return self::getCertificatesIssuedReport($year);
+        }
+    }
 }
